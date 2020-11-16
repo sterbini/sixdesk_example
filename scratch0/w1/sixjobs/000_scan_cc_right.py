@@ -104,7 +104,7 @@ knobs_right_all = np.arange(0., 201., 10.)#np.concatenate([np.arange(0., 91., 10
 knobs_left_all  = [0.0 for i in knobs_right_all]
 n_studies = len(knobs_right_all)
 
-for flag in ['weak''strong', 'both']:
+for flag in ['weak','strong', 'both']:
 
   if flag_run_madx:
       for n_study in range(n_studies):

@@ -1,5 +1,3 @@
-
-
 system, 'cp %CURRENT_PATH%/input_%STUDY%.py input.py';
 system, 'cp %CURRENT_PATH%/config_%STUDY%.py config.py';
 system, 'cp %CURRENT_PATH%/optics_specific_tools_%STUDY%.py optics_specific_tools.py';
