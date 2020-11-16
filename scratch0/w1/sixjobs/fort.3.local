@@ -1,0 +1,51 @@
+DYNK
+DYNKSETS
+FUN ramp_CC0 LINSEG 0 10000 0 3.445787875509007
+SET acfgah.4ar1.b1 voltage ramp_CC0 1 10000 -1
+FUN ramp_CC1 LINSEG 0 10000 0 3.445787875509007
+SET acfgah.4br1.b1 voltage ramp_CC1 1 10000 -1
+FUN ramp_CC2 LINSEG 0 10000 0 3.428881456334957
+SET acfgah.4al1.b1 voltage ramp_CC2 1 10000 -1
+FUN ramp_CC3 LINSEG 0 10000 0 3.428881456334957
+SET acfgah.4bl1.b1 voltage ramp_CC3 1 10000 -1
+FUN ramp_CC4 LINSEG 0 10000 0 0.0
+SET acfgah.4ar5.b1 voltage ramp_CC4 1 10000 -1
+FUN ramp_CC5 LINSEG 0 10000 0 0.0
+SET acfgah.4br5.b1 voltage ramp_CC5 1 10000 -1
+FUN ramp_CC6 LINSEG 0 10000 0 0.0
+SET acfgah.4al5.b1 voltage ramp_CC6 1 10000 -1
+FUN ramp_CC7 LINSEG 0 10000 0 0.0
+SET acfgah.4bl5.b1 voltage ramp_CC7 1 10000 -1
+FUN ramp_CC8 LINSEG 0 10000 0 0.0
+SET acfgav.4ar1.b1 voltage ramp_CC8 1 10000 -1
+FUN ramp_CC9 LINSEG 0 10000 0 0.0
+SET acfgav.4br1.b1 voltage ramp_CC9 1 10000 -1
+FUN ramp_CC10 LINSEG 0 10000 0 0.0
+SET acfgav.4al1.b1 voltage ramp_CC10 1 10000 -1
+FUN ramp_CC11 LINSEG 0 10000 0 0.0
+SET acfgav.4bl1.b1 voltage ramp_CC11 1 10000 -1
+FUN ramp_CC12 LINSEG 0 10000 0 3.4168937910401
+SET acfgav.4ar5.b1 voltage ramp_CC12 1 10000 -1
+FUN ramp_CC13 LINSEG 0 10000 0 3.4168937910401
+SET acfgav.4br5.b1 voltage ramp_CC13 1 10000 -1
+FUN ramp_CC14 LINSEG 0 10000 0 3.4191781741912823
+SET acfgav.4al5.b1 voltage ramp_CC14 1 10000 -1
+FUN ramp_CC15 LINSEG 0 10000 0 3.4191781741912823
+SET acfgav.4bl5.b1 voltage ramp_CC15 1 10000 -1
+NEXT
+/DUMP
+/ip3     1 1030 2 IP3_DUMP_1 12000 20000
+/ip3..2  1 1032 2 IP3_DUMP_2 20000 28000
+/NEXT
+/LINE
+/ELEMENT  0 2 1 2.5 2.5
+/NEXT
+/FMA
+/IP3_DUMP_1 NAFF
+/IP3_DUMP_2 NAFF
+/NEXT
+/ZIPF
+/fma_sixtrack
+/NEXT
+/
+/ always end file with new line char

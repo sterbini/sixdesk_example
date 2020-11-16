@@ -108,7 +108,7 @@ knobs_left_all = np.array([ [optics_file for xing in knobs_right] for optics_fil
 
 n_studies = len(knobs_right_all)
 
-for flag in ['weak''strong', 'both']:
+for flag in ['weak','strong', 'both']:
 
   if flag_run_madx:
       for n_study in range(n_studies):
