@@ -1,0 +1,4 @@
+rm -rf cronlogs/ sixdesklogs/ sixtrack_input/ work/
+rm -rf w1/track
+rm w1/sixjobs/cronlogs w1/sixjobs/*.log w1/sixjobs/work w1/sixjobs/track w1/sixjobs/sixtrack_input w1/sixjobs/study
+rm -rf w1/sixjobs/studies/*
