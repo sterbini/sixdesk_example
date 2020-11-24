@@ -19,7 +19,7 @@ The procedure to run 1 job is:
 1. python3 000_test_1job.py run_madx
 2. python3 000_test_1job.py check_madx
 3. python3 000_test_1job.py run_six
-4. python3 000_test_1job.py run_six
+4. python3 000_test_1job.py run_missing
 5. python3 000_test_1job.py run_sixdb
 
 The user must modify the "Parameters for config.py" & "Parameters for sixdeskenv" depending on the study. 
