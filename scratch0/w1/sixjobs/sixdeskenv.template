@@ -29,7 +29,7 @@ export workspace=w1
 
 # The directory for the workspace normally $HOME
 initial=`echo $LOGNAME | cut -c 1`
-export basedir=/afs/cern.ch/work/s/skostogl/private/workspaces/HL_LHC/CCs/DA_open
+export basedir=%PRESENT_DIR%
 
 # The scratch directory for temporary input files, jobs, sixdesk databases etc (not normally backed up)
 export scratchdir=$basedir/scratch0

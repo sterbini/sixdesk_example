@@ -152,6 +152,7 @@ study_prefix          = 'SCAN_DA_Ioct300_C1e-3_Q15_CCs-190'
 current_path          = os.getcwd()
 current_mask_path     = current_path + "/mask"
 current_template_path = current_path + "/mask/templates"
+current_path_sixdesk  =(os.path.split(os.path.split(os.path.split(current_path)[0])[0])[0])
 #####################
 #####################
 
@@ -265,7 +266,8 @@ for flag in ['weak']:#['weak', 'strong', 'both']:
                     '%NPART%': str(bunch_intensity),
                     '%DPINI%':str(dpini),
                     '%EMIT_UM':str(emit_um),
-                    '%ANGLES': str(angles)
+                    '%ANGLES': str(angles),
+                    '%PRESENT_DIR%': str(current_path_sixdesk)
                     }
         replace_file('sixdeskenv',dict)
         ##################################################
