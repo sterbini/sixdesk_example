@@ -120,11 +120,11 @@ configuration = {
     'knob_settings':  {
         #IP specific orbit settings
         'on_x1'                   : %ON_X1,          # [urad]  
-        'on_sep1'                 : -0.75,            # [mm]   
+        'on_sep1'                 : 0.0,            # [mm]   
         'on_x2'                   : 170,         # [urad] 
         'on_sep2'                 : 1.,        # [mm]   
         'on_x5'                   : %ON_X5,          # [urad] 
-        'on_sep5'                 : 0.75,            # [mm]   
+        'on_sep5'                 : 0.0,            # [mm]   
         'on_x8'                   : -200,         # [urad] 
         'on_sep8'                 : -1.,       # [mm]   
         'on_a1'                   : 0,            # [urad] 
@@ -148,7 +148,7 @@ configuration = {
         'on_sol_atlas'            : 0,
         'on_sol_cms'              : 0,
         'on_sol_alice'            : 0,
-        # CC knobs to open bump
+        # CC knobs to open bump in percentage (%)
         'par_crab_L1B1'            : %CRAB_L1B1,
         'par_crab_L1B2'            : %CRAB_L1B2,
         'par_crab_R1B1'            : %CRAB_R1B1,

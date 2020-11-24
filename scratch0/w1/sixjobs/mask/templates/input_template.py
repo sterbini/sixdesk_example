@@ -184,9 +184,24 @@ else:
     print('Warning: Luminosity computation requires two beams')
 
 
-if not enable_lumi_control:
-    print('Separations in IP2 and IP8 are left untouched')
-elif enable_bb_legacy or mode=='b4_without_bb':
+#if not enable_lumi_control:
+#    print('Separations in IP2 and IP8 are left untouched')
+#elif enable_bb_legacy or mode=='b4_without_bb':
+#    mad.use(f'lhcb{beam_to_configure}')
+#    if mode=='b4_without_bb':
+#        print('Leveling not working in this mode!')
+#    else:
+#        # Luminosity levelling
+#        vars_for_legacy_level = ['lumi_ip8',
+#            'nco_IP1', 'nco_IP2', 'nco_IP5', 'nco_IP8']
+#        mad.set_variables_from_dict({
+#            'par_'+kk: configuration[kk] for kk in vars_for_legacy_level})
+#        mad.input("call, file='modules/module_02_lumilevel.madx';")
+#else:
+#    print('Start pythonic leveling:')
+#    ost.lumi_control(mad, twiss_dfs, configuration, knob_names)
+
+if True:
     mad.use(f'lhcb{beam_to_configure}')
     if mode=='b4_without_bb':
         print('Leveling not working in this mode!')
@@ -197,9 +212,7 @@ elif enable_bb_legacy or mode=='b4_without_bb':
         mad.set_variables_from_dict({
             'par_'+kk: configuration[kk] for kk in vars_for_legacy_level})
         mad.input("call, file='modules/module_02_lumilevel.madx';")
-else:
-    print('Start pythonic leveling:')
-    ost.lumi_control(mad, twiss_dfs, configuration, knob_names)
+
 
 # Force leveling
 if 'force_leveling' in configuration.keys():

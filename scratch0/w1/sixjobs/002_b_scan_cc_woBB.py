@@ -15,10 +15,11 @@ import matplotlib.pyplot as plt
 from shutil import copymode, move
 
 #####################
-# This script changes the voltage of the CCs RIGHT ANF LEFT of IP1
-# There are 3 modes: weak, strong, both. This means that the CC bump is open for the weak beam, the strong beam and both. 
+# This script changes the voltage of the CCs RIGHT and LEFT of IP1. Beam-beam is OFF. 
 #####################
 
+# Useful functions
+#####################
 def multiple_replace(dict, text):
   regex = re.compile("(%s)" % "|".join(map(re.escape, dict.keys())))
   return regex.sub(lambda mo: dict[mo.string[mo.start():mo.end()]], text)
@@ -31,37 +32,85 @@ def replace_file(file_path,dict):
     copymode(file_path, abs_path)
     remove(file_path)
     move(abs_path, file_path)
+#####################
+#####################
 
-#sixdesk_exe   = "/afs/cern.ch/work/s/skostogl/public/useful/SixDesk/utilities/bash"
-sixdesk_exe   = "/afs/cern.ch/work/s/skostogl/private/sixdesk/SixDesk_fort13_new/SixDesk/utilities/bash"
+# Sixdesk exe
+#####################
+sixdesk_exe   = "/afs/cern.ch/project/sixtrack/SixDesk_utilities/pro/utilities/bash"
+#####################
+#####################
 
-# templates
+# Templates
+#####################
 template_mask       = 'HL_template.madx'
 template_mask_py    = 'input_template.py'
 template_config     = 'config_template.py'
 template_fort3local = 'fort.3.local.template'
-template_fort3      = 'fort.3.mother1_col_template'
+template_fort3      = 'fort.3.mother1_col_template' # this allows an easy scan in z
 template_six        = 'sixdeskenv.template'
+#####################
+#####################
 
-# store pickles in DA
+# store DA pickles in DA_and_studies
+#####################
 store_pickles = 'DA_and_studies'
+#####################
+#####################
 
-flag_run_madx       = True
-flag_check_madx     = False ## check missing_mad.txt
-flag_run_six        = False
-flag_run_missing    = False
-flag_run_sixdb      = False
+# Initialize flag
+#####################
+flag_run_madx, flag_check_madx, flag_run_six, flag_run_missing, flag_run_sixdb = False, False, False, False, False
+#####################
+#####################
 
+# Input mode from user
+#####################
+if len(sys.argv)>1:
+    flag = sys.argv[1]
+    if flag == 'run_madx':
+        flag_run_madx       = True  ## to run MADX jobs
+    elif flag == 'check_madx':
+        flag_check_madx     = True ## to check missing MADX jobs in missing_mad.txt
+    elif flag == 'run_six':
+        flag_run_six        = True ## to run sixtrack jobs
+    elif flag == 'run_missing':
+        flag_run_missing    = True ## to run sixtrack jobs
+    elif flag == 'run_sixdb':
+        flag_run_sixdb      = False ## to compute DA and store in pickle
+    elif flag == '-h':
+        print('Valid modes:')
+        print('run_madx: to run MADX jobs')
+        print('check_madx: to check MADX jobs. Missing jobs will be saved in missing_madx.txt')
+        print('run_six: to run sixtrack jobs')
+        print('run_missing: to resubmit missing jobs')
+        print('run_sixdb: to compute DA and store pickle in DA_and_studies folder')
 
+    else:
+        print(f'Unknown mode {flag}. Valid modes: run_madx, check_madx, run_six, run_missing, run_sixdb. Pass -h argument to print functionality of each mode.')
+        exit()
+else:
+    print('No mode specified. Valid modes: run_madx, check_madx, run_six, run_missing, run_sixdb. Pass -h argument to print functionality of each mode.')
+    exit()
+#####################
+#####################
+
+# sixdb path
+#####################
 if flag_run_sixdb:
   sys.path.append('/afs/cern.ch/work/s/skostogl/public/useful/SixDeskDB_new/SixDeskDB')
-  #sys.path.append('/afs/cern.ch/user/s/skostogl/public/SPS_sixtrack/sixdb/SixDeskDB')
   import sixdeskdb
+#####################
+#####################
 
-# parameters for config.py
+# Parameters for config.py
+#####################
 mode            = 'b1_without_bb'
 optics_path     = '/afs/cern.ch/eng/lhc/optics/HLLHCV1.5'
 optics_file     = '/afs/cern.ch/eng/lhc/optics/HLLHCV1.5/round/opt_round_150_1500_thin.madx'
+# for version HL-LHCv1.4
+#optics_path     = '/afs/cern.ch/eng/lhc/optics/HLLHCV1.4'
+#optics_file     = '/afs/cern.ch/eng/lhc/optics/HLLHCV1.4/round/opt_round_150_1500_thin.madx'
 emit_um         = 2.5
 bunch_length    = 0.075
 bunch_intensity = 1.2e11
@@ -74,41 +123,63 @@ ioct            = 300.
 coupling        = 1e-3
 on_x1           = 250.
 on_x5           = on_x1
+# careful, when modifying on_crab1 and 5, df_crabs_b1.pickle that will be used for the DYNK block must also be changed
 on_crab1        = -190.
 on_crab5        = -190.
 on_disp         = 1
 only_lr         = False
 only_ho         = False
 z_mm            = 0.
+#####################
+#####################
 
+# Parameters for sixdeskenv
+#####################
 dpini        = 27e-5
 angles       = 5
+#####################
+#####################
 
+# Prefix
+#####################
 study_prefix          = 'SCAN_DA_Ioct300_C1e-3_Q15_CCs-190_WOBB'
+#####################
+#####################
+
+# Useful paths
+#####################
 current_path          = os.getcwd()
 current_mask_path     = current_path + "/mask"
 current_template_path = current_path + "/mask/templates"
+#####################
+#####################
 
 
-# read cavity voltage for DYNK ramp
+# Read cavity voltage from df_crabs_b1 (-190 urad and closed bump) for DYNK ramp
+#####################
 voltage_crabs = pd.read_pickle('df_crabs_b1.pickle')
 voltage_crabs_r1 = voltage_crabs[(voltage_crabs['name'].str.contains('acfgah')) & (voltage_crabs['name'].str.contains('r1.'))].volt.iloc[0]
 voltage_crabs_l1 = voltage_crabs[(voltage_crabs['name'].str.contains('acfgah')) & (voltage_crabs['name'].str.contains('l1.'))].volt.iloc[0]
 voltage_crabs_r5 = voltage_crabs[(voltage_crabs['name'].str.contains('acfgav')) & (voltage_crabs['name'].str.contains('r5.'))].volt.iloc[0]
 voltage_crabs_l5 = voltage_crabs[(voltage_crabs['name'].str.contains('acfgav')) & (voltage_crabs['name'].str.contains('l5.'))].volt.iloc[0]
+#####################
+#####################
 
 
-# scan over
-
+# Scan over
+#####################
 knobs_right = np.arange(0., 201., 10.)
 knobs_left  = np.arange(0., 201., 10.)
 
 knobs_right_all = np.array([ [xing for xing in knobs_right] for optics_file in knobs_left ]).flatten()
 knobs_left_all = np.array([ [optics_file for xing in knobs_right] for optics_file in knobs_left ]).flatten()
-
 n_studies = len(knobs_right_all)
+#####################
+#####################
 
-for flag in ['weak','strong', 'both']:
+# Main script
+#####################
+for flag in ['weak']:#['weak', 'strong', 'both']:
 
   if flag_run_madx:
       for n_study in range(n_studies):
@@ -134,7 +205,8 @@ for flag in ['weak','strong', 'both']:
            knobs_left_all_weak = knobs_left_all[n_study]
   
   
-        ## MASK
+        ##################################################
+        ## mask
         ##################################################
         call(['cp', f'{current_mask_path}/{template_mask}',f'{current_mask_path}/{current_study}.mask'],shell=False)
   
@@ -144,9 +216,11 @@ for flag in ['weak','strong', 'both']:
                  }
   
         replace_file(f'{current_mask_path}/{current_study}.mask',dict)
+        ##################################################
         ## input.py
         ##################################################
         call(['cp', f'{current_template_path}/{template_mask_py}', f'mask/input_{current_study}.py'],shell=False)
+        ##################################################
         ## config.py
         ##################################################
         call(['cp', f'{current_template_path}/{template_config}', f'{current_mask_path}/config_{current_study}.py'],shell=False)
@@ -182,7 +256,8 @@ for flag in ['weak','strong', 'both']:
         ## optics specific
         ##################################################
         call(['cp', f'{current_template_path}/optics_specific_tools.py', f'{current_mask_path}/optics_specific_tools_{current_study}.py'],shell=False)
-        ## SIXDESKENV
+        ##################################################
+        ## sixdeskenv
         ##################################################
         call(['cp', template_six, 'sixdeskenv'],shell=False)
         dict = {    '%STUDY%': current_study,
@@ -194,6 +269,7 @@ for flag in ['weak','strong', 'both']:
         replace_file('sixdeskenv',dict)
         ##################################################
         ## fort.3.local
+        ##################################################
   
         current_r1 = voltage_crabs_r1-knobs_right_all_weak/100.*voltage_crabs_r1
         current_l1 = voltage_crabs_l1-knobs_left_all_weak/100.*voltage_crabs_l1
@@ -209,23 +285,46 @@ for flag in ['weak','strong', 'both']:
         replace_file('fort.3.local',dict)
         ##################################################
         ## fort.3.mother1
+        ##################################################
         call(['cp', f'control_files/{template_fort3}' , 'control_files/fort.3.mother1_col'],shell=False)
         dict = {    '%z_mm': str(z_mm),
                     }
         replace_file('control_files/fort.3.mother1_col',dict)
+        ##################################################
         ##################################################
   
         call([sixdesk_exe + '/set_env.sh','-s', '-l','-P', '/afs/cern.ch/user/s/skostogl/miniconda3/bin/python'], shell=False)
         call([sixdesk_exe + '/mad6t.sh', '-o','2','-s','-P','/afs/cern.ch/user/s/skostogl/miniconda3/bin/python'], shell=False)
         call(['mv', 'fort.3.local', f'fort.3.local.{current_study}'],shell=False)
   
+  if flag_check_madx:
+    with open('missing_mad.txt', 'w') as f_res:
+        for n_study in range(n_studies):
+            current_study = study_prefix + "_%s_%s_%s" %(flag, knobs_right_all[n_study], knobs_left_all[n_study])
   
+            print("####################################################################")
+            print("### CURRENT STUDY IS: %s ###" %current_study)
+            print("####################################################################")
+            import os
+            try:
+              files = os.listdir('../../sixtrack_input/w1/%s' %current_study)
+              if ('fort.2_1.gz' not in files):
+                f_res.write('%s \n' %current_study)
+                f_res.flush()
+            except:
+                f_res.write('%s---> problematic \n' %current_study)
+                f_res.flush()
+  
+
+
   if flag_run_six:
       for n_study in range(n_studies):
         current_study = study_prefix + "_%s_%s_%s" %(flag, knobs_right_all[n_study], knobs_left_all[n_study])
         call(['mv', f'fort.3.local.{current_study}', 'fort.3.local'],shell=False)
+        print("####################################################################")
   
         print("### RUNNING FOR: %s ###" %current_study)
+        print("####################################################################")
   
         call([sixdesk_exe + '/set_env.sh','-d', current_study],shell=False)
         call([sixdesk_exe + '/set_env.sh','-s', '-l'] ,shell=False)
@@ -239,7 +338,9 @@ for flag in ['weak','strong', 'both']:
   
         call(['mv', f'fort.3.local.{current_study}', 'fort.3.local'],shell=False)
   
-        print("### RUNNING FOR: %s ###" %current_study)
+        print("####################################################################")
+        print("### RUNNING MISSING FOR: %s ###" %current_study)
+        print("####################################################################")
   
         call([sixdesk_exe + '/set_env.sh','-d', current_study],shell=False)
         call([sixdesk_exe + '/set_env.sh','-s', '-l'] ,shell=False)
@@ -258,7 +359,9 @@ for flag in ['weak','strong', 'both']:
     studies = []
     for n_study in range(n_studies):
       current_study = study_prefix + "_%s_%s_%s" %(flag, knobs_right_all[n_study], knobs_left_all[n_study])
-      print("### PLOTTING FOR: %s ###" %current_study)
+      print("####################################################################")
+      print("### DA FOR: %s ###" %current_study)
+      print("####################################################################")
       try:
           #if True:
           db=sixdeskdb.SixDeskDB.from_dir('./studies/'+current_study+'/')
@@ -284,5 +387,5 @@ for flag in ['weak','strong', 'both']:
           print('current_study')
   
     df = pd.DataFrame({'KR':qxx, 'KL': qyy, 'da': min_da, 'da2':min_da2, 'study':studies, 'mean_da':mean_da, 'mean_da2':mean_da2})
-    df.to_pickle(store_pickles + '/' + '%s.pickle' %study_prefix)
+    df.to_pickle(store_pickles + '/' + '%s_%s.pickle' %(study_prefix, flag))
     print(df)

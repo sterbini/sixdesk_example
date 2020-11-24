@@ -1,21 +1,31 @@
-#!/bin/sh
+#!/bin/bash
 # February 29, 2012
 # All the variables the user will not normally want to see!
-# The path to all scripts etc bin,Bin,scripts, exes, dots
-export sixdeskpath=/afs/cern.ch/group/si/slap/bin/sixdesk
-# The following SixTrack version is used for the one-turn
-# SixTrack run to get the Beta values and for all LSF tasks (except DA)
-# and the BNL EXE which is the same I hope
-#export SIXTRACKEXE=/afs/cern.ch/work/s/skostogl/private/sixsrc/SixTrack_no_errors/Sixtrack_12.17/SixTrack/SixTrack/SixTrack_cmakesix_LIBARCHIVE_NAFF_defaultcompiler_defaultbuildtype/SixTrack_4717_libarchive_naff_crlibm_fast_tilt_cmake_Linux_gfortran_static_x86_64_64bit
-export SIXTRACKEXE=/afs/cern.ch/work/s/skostogl/private/sixsrc/six_v5.4/SixTrack/build/SixTrack_cmakesix_defaultcompiler_defaultbuildtype/SixTrack_50400-66b6c21_zlib_crlibm_rn_Linux_gfortran_static_x86_64_64bit_double
-#export SIXTRACKEXE=/afs/cern.ch/work/s/skostogl/private/sixsrc/SixTrack_no_errors/Sixtrack_12.17/SixTrack/SixTrack/SixTrack_cmakesix_HUGENBLZ_LIBARCHIVE_NAFF_defaultcompiler_defaultbuildtype/SixTrack_4717_libarchive_naff_hugenblz_crlibm_fast_tilt_cmake_Linux_gfortran_static_x86_64_64bit
-if test "$BIGNBLZ" != ""
-then
-  export SIXTRACKEXE=$sixdeskpath/exes/SixTrack_bignblz_pro
-fi
-export SIXTRACKBNLEXE=$sixdeskpath/exes/SixTrack_bnl_pro
-# Latest DA version from
-export SIXTRACKDAEXE=$sixdeskpath/exes/SixTrack_crlibm_da_lf95v4200
+# March 25th, 2017
+# synchronising with new scripts + appname
+#
+# app name, used by any platform
+#export appName=latest
+# app version, used by any platform
+# NB: non-BOINC: variable not defined or left empty means latest ver
+#     better anyway to define it
+#export appVer=50403
+
+# # The path to all scripts etc bin,Bin,scripts, exes, dots
+# export sixdeskpath=/afs/cern.ch/group/si/slap/bin/sixdesk
+# # The following SixTrack version is used for the one-turn
+# # SixTrack run to get the Beta values and for all LSF tasks (except DA)
+# # and the BNL EXE which is the same I hope
+# export SIXTRACKEXE=$sixdeskpath/exes/$appName
+export SIXTRACKEXE="/afs/cern.ch/project/sixtrack/build/50403/SixTrack_50403-9e43f07_zlib_crlibm_rn_Linux_gfortran_static_x86_64_64bit_double"
+# if test "$BIGNBLZ" != ""
+# then
+#   export SIXTRACKEXE=$sixdeskpath/exes/SixTrack_bignblz_pro
+# fi
+# export SIXTRACKBNLEXE=$sixdeskpath/exes/SixTrack_bnl_pro
+# # Latest DA version from
+# export SIXTRACKDAEXE=$sixdeskpath/exes/SixTrack_crlibm_da_lf95v4200
+
 # The following version of mad-X is used by the mad6t jobs.
 # All now call a madx executable so -X is no longer required.
 export MADX_PATH="/afs/cern.ch/user/m/mad/bin"
@@ -74,17 +84,16 @@ export sixdeskstudy=$sixdeskhome/studies/$LHCDescrip
 
 # For BOINC 
 # The SixTrack executable is now ????.
-export sixdeskpts=boinc:users
-export boincdir=/afs/cern.ch/user/b/boinc/scratch0
-export sixdeskboincdirname=$workspace"_"$LHCDescrip
-# and use boinctest (for Igor and new BOINC release)
-export sixdeskboinctest="false"
-sixdeskboincdir=$boincdir/boinc/$sixdeskboincdirname
-if test "$sixdeskboinctest" = "true"
-then
-  sixdeskboincdir=$boincdir/boinctest/$sixdeskboincdirname
-fi
-export sixdeskboincdir
+# export sixdeskpts=boinc:users
+# export boincdir=/afs/cern.ch/user/b/boinc/scratch0
+# export sixdeskboincdirname=$workspace"_"$LHCDescrip
+# # and use boinctest (for Igor and new BOINC release)
+# export sixdeskboinctest=false
+# sixdeskboincdir=$boincdir/boinc/$sixdeskboincdirname
+# if ${sixdeskboinctest} ; then
+#   sixdeskboincdir=$boincdir/boinctest/$sixdeskboincdirname
+# fi
+# export sixdeskboincdir
 export sixdeskparts=`expr $sixdeskpairs \* 2`
 if test "$short" -eq 1 -o "$da" -eq 1
 then
