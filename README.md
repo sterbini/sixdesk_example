@@ -12,7 +12,7 @@ This is a full directory to run DA studies with SixTrack in order to evaluate th
 - sixjobs/control_files/fort.3.mother1_col_template: this is an easy way to modify the z coordinate (apart from dp/p) for the tracking simulations.
 - The *.py scripts in sixjobs create all the files needed to run sixdesk with the new masks. A 1 job example can be found in 000_test_1job.py
 
-## Example
+## Simple 1 job example
 python3 000_test_1job.py -h: print all available modes and what their functionality
 
 The procedure to run 1 job is:
@@ -24,3 +24,8 @@ The procedure to run 1 job is:
 
 The user must modify the "Parameters for config.py" & "Parameters for sixdeskenv" depending on the study. 
 
+## Other examples
+1. 001_a_scan_cc_right_withBB.py: reduction of CC voltage right of IP1 up to 200% with BB
+2. 001_b_scan_cc_right_woBB.py: reduction of CC voltage right of IP1 up to 200% without BB
+3. 002_a_scan_cc_withBB.py: reduction of CC voltage right or left of IP1 (and all possible combinations) with BB
+4. 002_b_scan_cc_woBB.py: reduction of CC voltage right or left of IP1 (and all possible combinations) without BB
