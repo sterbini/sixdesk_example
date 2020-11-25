@@ -78,7 +78,7 @@ if len(sys.argv)>1:
     elif flag == 'run_missing':
         flag_run_missing    = True ## to run sixtrack jobs
     elif flag == 'run_sixdb':
-        flag_run_sixdb      = False ## to compute DA and store in pickle
+        flag_run_sixdb      = True ## to compute DA and store in pickle
     elif flag == '-h':
         print('Valid modes:')
         print('run_madx: to run MADX jobs')
