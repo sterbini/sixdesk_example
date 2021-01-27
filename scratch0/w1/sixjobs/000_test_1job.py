@@ -159,11 +159,16 @@ current_path_sixdesk  =(os.path.split(os.path.split(os.path.split(current_path)[
 
 # Read cavity voltage from df_crabs_b1 (-190 urad and closed bump) for DYNK ramp
 #####################
-voltage_crabs = pd.read_pickle('df_crabs_b1.pickle')
-voltage_crabs_r1 = voltage_crabs[(voltage_crabs['name'].str.contains('acfgah')) & (voltage_crabs['name'].str.contains('r1.'))].volt.iloc[0]
-voltage_crabs_l1 = voltage_crabs[(voltage_crabs['name'].str.contains('acfgah')) & (voltage_crabs['name'].str.contains('l1.'))].volt.iloc[0]
-voltage_crabs_r5 = voltage_crabs[(voltage_crabs['name'].str.contains('acfgav')) & (voltage_crabs['name'].str.contains('r5.'))].volt.iloc[0]
-voltage_crabs_l5 = voltage_crabs[(voltage_crabs['name'].str.contains('acfgav')) & (voltage_crabs['name'].str.contains('l5.'))].volt.iloc[0]
+#voltage_crabs = pd.read_pickle('df_crabs_b1.pickle')
+#voltage_crabs_r1 = voltage_crabs[(voltage_crabs['name'].str.contains('acfgah')) & (voltage_crabs['name'].str.contains('r1.'))].volt.iloc[0]
+#voltage_crabs_l1 = voltage_crabs[(voltage_crabs['name'].str.contains('acfgah')) & (voltage_crabs['name'].str.contains('l1.'))].volt.iloc[0]
+#voltage_crabs_r5 = voltage_crabs[(voltage_crabs['name'].str.contains('acfgav')) & (voltage_crabs['name'].str.contains('r5.'))].volt.iloc[0]
+#voltage_crabs_l5 = voltage_crabs[(voltage_crabs['name'].str.contains('acfgav')) & (voltage_crabs['name'].str.contains('l5.'))].volt.iloc[0]
+
+voltage_crabs_r1 = 0.
+voltage_crabs_l1 = 0.
+voltage_crabs_r5 = 0.
+voltage_crabs_l5 = 0.
 #####################
 #####################
 
